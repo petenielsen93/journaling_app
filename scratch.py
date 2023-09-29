@@ -1,13 +1,14 @@
 from datetime import datetime
 import os
-from tkinter import *
-from tkcalendar import *
+import tkinter as tk
+from tkcalendar import Calendar
+from tkinter import ttk
 import re
+
 
 def sanitize_filename(filename):
     return re.sub(r'[\\/:"*?<>|]+', '', filename)
 
-root=Tk()
 
 def newfile(selected_date):
     #current_date = datetime.now().strftime('%Y-%m-%d')
@@ -29,21 +30,26 @@ def newfile(selected_date):
     os.system(f"notepad {file_name}")
 
 def open_journal_entry():
-    selected_date = mycal.get_date()
-    #formatted_date = selected_date.strftime('%Y-%m-%d')
+    selected_date = cal.get_date()
     newfile(selected_date)
 
-mycal = Calendar(root, setmode="day")
-mycal.pack(padx=15,pady=15)
+root = tk.Tk()
+root.title('Calendar')
+root.geometry("750x400")
 
-open_cal=Button(root, text="Open Journal Entry", command=open_journal_entry)
+style = ttk.Style()
+style.configure("TButton", padding=6, relief="flat", background="primary")
+style.map("TButton", background=[("active", "primary")])
+
+frame = ttk.Frame(root)
+frame.pack(padx=15, pady=15)
+
+cal = Calendar(frame)
+cal.pack(padx=15)
+
+open_cal = ttk.Button(frame, text="Open Journal Entry", command=open_journal_entry, style="TButton")
 open_cal.pack(padx=15)
-
-root.geometry("300x300")
-root.title("Calendar")
-root.configure(bg="lightblue")
-
-mainloop()
+root.mainloop()
 
 
 #Not sure why it is no longer saving each entry into the journal_entries folder, but we have our MVP. Brainstorm on cosmetic and further function changes. 
